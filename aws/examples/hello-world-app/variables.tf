@@ -14,3 +14,6 @@ variable "name" {
   type        = string
   default     = "hello-world-app-example"
 }
+
+variable "aws_access_key" {}
+variable "aws_secret_key" {}
