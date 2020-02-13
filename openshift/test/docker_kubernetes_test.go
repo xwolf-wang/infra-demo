@@ -17,7 +17,7 @@ func TestDockerKubernetesUnit(t *testing.T) {
 	buildDockerImage(t)
 
 	// Path to the Kubernetes resource config we will test
-	kubeResourcePath := "../examples/docker-kubernetes/deployment.yml"
+	kubeResourcePath := "../docker-kubernetes/deployment.yml"
 
 	// To ensure we can reuse the resource config on the same cluster to test different scenarios, we setup a unique
 	// namespace for the resources for this test. Note that namespaces must be lowercase.
@@ -50,7 +50,7 @@ func buildDockerImage(t *testing.T) {
 	options := &docker.BuildOptions{
 		Tags: []string{"gruntwork-io/hello-world-app:v1"},
 	}
-	docker.Build(t, "../examples/docker-kubernetes", options)
+	docker.Build(t, "../docker-kubernetes", options)
 }
 
 // Validate the app is working
