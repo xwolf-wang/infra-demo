@@ -1,0 +1,72 @@
+# Deploy the hello-world-app to Kubernetes and expose it via a LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-world-app-deployment
+spec:
+  selector:
+    matchLabels:
+      app: hello-world-app
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: hello-world-app
+    spec:
+      containers:
+        - name: hello-world-app
+          image: gruntwork-io/hello-world-app:v1
+          ports:
+            - containerPort: 8080
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: hello-world-app-service
+spec:
+  selector:
+    app: hello-world-app
+  ports:
+    - protocol: TCP
+      targetPort: 8080
+      port: 8080
+  type: LoadBalancer
+---
+#kind: Route
+#apiVersion: v1
+#metadata:
+#  name: hello-world-app-service
+#spec:
+#  host: hello-world-app-service-geode.127.0.0.1.nip.io
+#  to:
+#    kind: sevice
+#    name: hello-world-app-service
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    openshift.io/host.generated: 'true'
+  creationTimestamp: '2020-02-09T13:03:35Z'
+  name: hello-world-app-service
+  namespace: myproject
+  resourceVersion: '183509'
+  selfLink: /apis/route.openshift.io/v1/namespaces/myproject/routes/hello-world-app-service
+  uid: 949b0624-4b3c-11ea-87a8-025000000001
+spec:
+  host: hello-world-app-service-myproject.127.0.0.1.nip.io
+  to:
+    kind: Service
+    name: hello-world-app-service
+    weight: 100
+  wildcardPolicy: None
+status:
+  ingress:
+  - conditions:
+    - lastTransitionTime: '2020-02-09T13:03:35Z'
+      status: 'True'
+      type: Admitted
+    host: hello-world-app-service-myproject.127.0.0.1.nip.io
+    routerName: router
+    wildcardPolicy: None
